@@ -1,0 +1,28 @@
+name: Pojo
+author: nahkd123
+version: 0.0.1-SNAPSHOT
+api-version: 1.20
+main: io.github.nahkd123.pojo.plugin.PojoPlugin
+website: "https://github.com/nahkd123/Pojo"
+
+commands:
+  pojo:
+    description: Main Pojo command. Mainly used by administrators.
+    permission: pojo.admin.command
+    usage: /pojo
+    aliases: [pj]
+
+permissions:
+  pojo.*:
+    description: Wildcard permission. Granted to OPs by default.
+    default: op
+    children:
+      pojo.admin.*: true
+  pojo.admin.*:
+    description: Wildcard administrative permission.
+    default: false
+    children:
+      pojo.admin.command: true
+  pojo.admin.command:
+    description: Allow the usage of administrators' command.
+    default: false

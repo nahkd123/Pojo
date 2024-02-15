@@ -1,0 +1,10 @@
+# Lore sections ordering. If the section is not present in this list, it will
+# be appended at the end of the manually ordered sections, sorted by when the
+# component type was first mentioned.
+# The special "pojo:separator" separates 2 different sections with an empty
+# line.
+loreOrdering:
+- "pojo:type"
+- "pojo:stats"
+- "pojo:separator"
+- "pojo:custom"

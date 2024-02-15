@@ -1,0 +1,35 @@
+# Pojo Sample Item (Standard)
+# This is the standard variant of Pojo custom items, and likely the only one in
+# Pojo (unless nahkd cooked something).
+# This variant is based on components system, where you can plug in what you
+# want, like adding gemstone slots for example.
+
+# A list of components
+# Components are applied from top to bottom.
+# Each component can be named to whatever you like, but they must be unique for
+# each component definition.
+components:
+  # Add pojo:display component
+  # Note that other components under this may modify the display.
+  Display:
+    type: "pojo:display"
+    # The Bukkit material name. For list of materials, see org.bukkit.Material.
+    material: IRON_SWORD
+    # The localized name of the item. This is not the same as "display name".
+    # Localized names are special kind of name that allows player to rename
+    # their item.
+    # The item ID is actually stored inside item's "NBT".
+    name: "&eSample Blade"
+    # Note that "lore" in this component will set the "pojo:custom" section of
+    # the lore. To set different section, use "pojo:add_lore", "pojo_set_lore"
+    # or "pojo:remove_lore" component.
+    # Sections other than "custom" might be automatically generated. For more
+    # information, please see the component's documentations.
+    lore:
+    - "&7&oA special blade crafted with cares."
+  # Since we are making a sword, we need to tell Pojo that this is a sword.
+  # Other types can be added by other plugins.
+  # Type name is automatically added into "pojo:type" lore section.
+  Type Specifier:
+    type: "pojo:type"
+    itemType: "pojo:sword"

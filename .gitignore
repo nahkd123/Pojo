@@ -1,0 +1,17 @@
+# Eclipse Platform
+/.settings/
+/pojo-*/.settings/
+
+# Eclipse ECJ (Eclipse IDE + VSCode)
+# .project will be handled by Maven plugin
+/.classpath
+/.project
+/pojo-*/.classpath
+/pojo-*/.project
+
+# Intellij
+# TODO please consider make a PR ;)
+
+# Maven
+/target/
+/pojo-*/target/
