@@ -20,7 +20,9 @@ import io.github.nahkd123.pojo.api.internal.PojoInternal;
  * <p>
  * <b>In-game editor</b>: In-game editor can be added to your component by using
  * {@link EditorComponentsFactory} for your components factory and
- * {@link EditorSupportedComponent} for the component.
+ * {@link EditorSupportedComponent} for the component. You can also use
+ * {@link DefaultedComponentsFactory} for the factory, but you won't be able to
+ * include the component description in components browser.
  * </p>
  * 
  * @param <T> The type for component data.

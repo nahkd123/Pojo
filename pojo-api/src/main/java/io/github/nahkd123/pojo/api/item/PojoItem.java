@@ -9,9 +9,16 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import io.github.nahkd123.pojo.api.internal.PojoInternal;
+import io.github.nahkd123.pojo.api.item.standard.StandardPojoItem;
 import io.github.nahkd123.pojo.api.registry.RegistryEntry;
 import io.github.nahkd123.pojo.api.registry.UserDefinedId;
 
+/**
+ * <p>
+ * A base interface for all Pojo item variants. Currently, there is only a
+ * single variant: Standard ({@link StandardPojoItem}).
+ * </p>
+ */
 public interface PojoItem extends RegistryEntry {
 	/**
 	 * <p>

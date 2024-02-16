@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.nahkd123.pojo.api.internal.PojoInternal;
 import io.github.nahkd123.pojo.api.internal.PojoKeys;
+import io.github.nahkd123.pojo.api.item.standard.component.ComponentsFactory;
 import io.github.nahkd123.pojo.api.utils.TextUtils;
 import io.github.nahkd123.pojo.plugin.command.provided.PojoAdminCommand;
 import io.github.nahkd123.pojo.plugin.editor.EditorSession;
@@ -28,7 +29,15 @@ import io.github.nahkd123.pojo.plugin.registry.PersistentItemsRegistry;
 
 /**
  * <p>
- * The main entry point for Pojo Bukkit plugin.
+ * The main entry point for Pojo Bukkit plugin. Typically, you don't need to get
+ * the Pojo plugin instance, but if you want to, you can use
+ * {@link JavaPlugin#getPlugin(Class)}. Please note that {@link PojoPlugin}
+ * changes more frequently than Pojo API.
+ * </p>
+ * <p>
+ * <b>Accessing the API</b>: The API can be accessed by accessing some static
+ * methods in various classes under Pojo API, such as
+ * {@link ComponentsFactory#register(NamespacedKey)}.
  * </p>
  */
 public class PojoPlugin extends JavaPlugin {
