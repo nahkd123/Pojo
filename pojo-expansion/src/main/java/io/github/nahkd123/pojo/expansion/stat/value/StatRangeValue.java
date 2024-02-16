@@ -27,5 +27,5 @@ public record StatRangeValue(StatValue min, StatValue max, double exponent) impl
 	}
 
 	@Override
-	public String getDisplayText() { return "&7[" + min + "&7; " + max + "&7]"; }
+	public String getDisplayText() { return "&7[" + min.getDisplayText() + "&7; " + max.getDisplayText() + "&7]"; }
 }
