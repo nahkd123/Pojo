@@ -18,6 +18,7 @@
 	<modules>
 		<module>pojo-plugin</module>
 		<module>pojo-api</module>
+		<module>pojo-expansion</module>
 	</modules>
 	<repositories>
 		<repository>

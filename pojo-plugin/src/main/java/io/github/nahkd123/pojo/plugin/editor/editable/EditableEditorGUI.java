@@ -10,8 +10,10 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.nahkd123.pojo.api.editor.Editable;
 import io.github.nahkd123.pojo.api.editor.EditableBool;
+import io.github.nahkd123.pojo.api.editor.EditableDouble;
 import io.github.nahkd123.pojo.api.editor.EditableInteger;
 import io.github.nahkd123.pojo.api.editor.EditableList;
+import io.github.nahkd123.pojo.api.editor.EditableObject;
 import io.github.nahkd123.pojo.api.editor.EditableString;
 import io.github.nahkd123.pojo.api.utils.TextUtils;
 import io.github.nahkd123.pojo.plugin.editor.EditorGUI;
@@ -108,6 +110,21 @@ public abstract class EditableEditorGUI extends EditorGUI {
 				.getStack());
 
 		addProcessor(
+			EditableDouble.class,
+			editable -> new StackBuilder(new ItemStack(editable.getDescription().icon()))
+				.name("&6Number: &e" + editable.getDescription().name())
+				.appendLore(Stream.of(editable.getDescription().description())
+					.map(s -> "&7" + TextUtils.colorize(s))
+					.toArray(String[]::new))
+				.appendLore(
+					"",
+					"&7Value: &b" + editable.getValue())
+				.appendLore(
+					"",
+					"&eLeft click &7to open")
+				.getStack());
+
+		addProcessor(
 			EditableBool.class,
 			new EditableClickProcessor<>() {
 				public void onClick(EditableBool editable, InventoryClickEvent event, EditableEditorGUI gui) {
@@ -143,6 +160,25 @@ public abstract class EditableEditorGUI extends EditorGUI {
 				.appendLore(
 					"",
 					"&7Contents (" + editable.size() + " entries)")
+				.appendLore(editable.getPreviewLines()
+					.stream()
+					.map(s -> "  &f" + s)
+					.toArray(String[]::new))
+				.appendLore(
+					"",
+					"&eLeft click &7to open")
+				.getStack());
+
+		addProcessor(
+			EditableObject.class,
+			editable -> new StackBuilder(new ItemStack(editable.getDescription().icon()))
+				.name("&6Options: &e" + editable.getDescription().name())
+				.appendLore(Stream.of(editable.getDescription().description())
+					.map(s -> "&7" + TextUtils.colorize(s))
+					.toArray(String[]::new))
+				.appendLore(
+					"",
+					"&7Contents:")
 				.appendLore(editable.getPreviewLines()
 					.stream()
 					.map(s -> "  &f" + s)

@@ -9,7 +9,7 @@ import java.util.List;
  * 
  * @param <T> The value type.
  */
-public sealed interface Editable permits EditableString, EditableList, EditableObject, EditableInteger, EditableBool {
+public sealed interface Editable permits EditableString, EditableList, EditableObject, EditableInteger, EditableBool, EditableDouble {
 	public NodeDescription getDescription();
 
 	public List<String> getPreviewLines();

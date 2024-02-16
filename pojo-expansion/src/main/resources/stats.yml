@@ -1,0 +1,46 @@
+# Configuration for "pojoexpansion:stats" component.
+
+# Localization for all stats
+localization:
+  # Default stats display, applies to all unconfigured stats
+  # addValue: Add a value to player's stats
+  # addPercentage: Add a percentage to player's stats multiplier
+  # multiplier: Multiplies player's stats with a value
+  # <...>Range: Ranged version
+  # Placeholders
+  defaults:
+    addValue:           "&7{name}: &a+{value;number}"
+    addPercentage:      "&7{name}: &a+{value;percentage}"
+    multiplier:         "&7{name}: &ex{value;number}"
+    addValueRange:      "&7{name}: &a+{min;number} &7-> &a+{max;number}"
+    addPercentageRange: "&7{name}: &a+{min;percentage}% &7-> &a+{max;percentage}"
+    multiplierRange:    "&7{name}: &ex{min;number} &7-> &ex{max;number}"
+
+  # Stat type ID namespace
+  pojoexpansion:
+    # Vanilla attributes (pojoexpansion:attribute)
+    attribute:
+      # Use default format
+      genericMaxHealth: "Health"
+      genericKnockbackResistance: "Knockback Resistance"
+      genericMovementSpeed: "Speed"
+      genericFlyingSpeed: "Flying Speed"
+
+      # Use custom format
+      # If the format in this section is absent, it will use the default
+      # format.
+      genericAttackDamage:
+        name: "Attack Damage"
+        addValue: "&7Attack Damage: &c+{value;number} HP"
+        addPercentage: "&7Attack Damage: &c+{value;percentage}"
+        multiplier: "&7Attack Damage: &cx{value;number} HP"
+
+      # And we're back to default format again!
+      genericAttackKnockback: "Attack Knockback"
+      genericAttackSpeed: "Attack Speed"
+      genericArmor: "Defense"
+      genericArmorToughness: "Armor Toughness"
+      genericLuck: "Luck"
+      genericMaxAbsorption: "Absorption"
+      horseJumpStrength: "Horse Jump Strength"
+      zombieSpawnReinforcements: "Zombie Spawn Reinforcements"

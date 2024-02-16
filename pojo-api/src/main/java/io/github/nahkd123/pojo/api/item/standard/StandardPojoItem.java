@@ -91,7 +91,8 @@ public class StandardPojoItem implements PojoItem {
 		Map<Component<?>, Object> data = new HashMap<>();
 
 		for (Component component : components) {
-			Object obj = data.put(component, component.createNewData());
+			Object obj = component.createNewData();
+			data.put(component, obj);
 			mat = component.applyMaterial(obj, mat, displayMode);
 			name = component.applyName(obj, name, displayMode);
 			component.applyLore(obj, lore, displayMode);

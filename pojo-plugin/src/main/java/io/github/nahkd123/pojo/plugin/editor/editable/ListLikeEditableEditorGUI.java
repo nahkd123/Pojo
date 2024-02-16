@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.nahkd123.pojo.api.editor.Editable;
+import io.github.nahkd123.pojo.api.editor.EditableObject;
 import io.github.nahkd123.pojo.plugin.editor.EditorGUI;
 import io.github.nahkd123.pojo.plugin.editor.EditorSession;
 import io.github.nahkd123.pojo.plugin.gui.StackBuilder;
@@ -19,8 +20,13 @@ public class ListLikeEditableEditorGUI extends EditableEditorGUI {
 		super(previous, session, current, 6);
 		this.current = current;
 		this.allEditables = allEditables;
+		updateEditablesList();
 		placePageButtonsToSidebar();
 		placePage();
+	}
+
+	protected void updateEditablesList() {
+		if (current.getEditable() instanceof EditableObject obj) allEditables = obj.getFields();
 	}
 
 	public int getPage() { return current.getAuxPage(); }
@@ -33,6 +39,7 @@ public class ListLikeEditableEditorGUI extends EditableEditorGUI {
 
 	@Override
 	public void refresh() {
+		updateEditablesList();
 		super.refresh();
 		placePageButtonsToSidebar();
 		placePage();
