@@ -3,13 +3,16 @@ package io.github.nahkd123.pojo.plugin.command.provided;
 import java.io.File;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import io.github.nahkd123.pojo.api.item.PojoItem;
 import io.github.nahkd123.pojo.api.registry.UserDefinedId;
 import io.github.nahkd123.pojo.plugin.PojoPlugin;
+import io.github.nahkd123.pojo.plugin.command.CommandContext;
 import io.github.nahkd123.pojo.plugin.command.CommandException;
 import io.github.nahkd123.pojo.plugin.command.CommandExecutorWrapper;
 import io.github.nahkd123.pojo.plugin.command.SimplePluginCommand;
+import io.github.nahkd123.pojo.plugin.command.argument.NumberArgumentType;
 import io.github.nahkd123.pojo.plugin.command.argument.PlayerArgumentType;
 import io.github.nahkd123.pojo.plugin.command.argument.RegistryArgumentType;
 import io.github.nahkd123.pojo.plugin.command.argument.UserDefinedIdArgumentType;
@@ -46,14 +49,11 @@ public class PojoAdminCommand extends CommandExecutorWrapper {
 			.withChildren("give", new SimplePluginCommand()
 				.withArgument("player", PlayerArgumentType.TYPE)
 				.withArgument("id", new RegistryArgumentType(plugin.getItems()::getAllIDs))
-				.withCallback(ctx -> {
-					Player player = ctx.getArgument("player", PlayerArgumentType.TYPE);
-					UserDefinedId id = ctx.getArgument("id", UserDefinedIdArgumentType.TYPE);
-					PojoItem item = plugin.getItems().get(id);
-					if (item == null) throw new CommandException("Item with ID " + id + " does not exists");
-					player.getInventory().addItem(item.createNew(false));
-					ctx.feedback("&aGave " + player.getName() + " 1x " + id + "!");
-				}))
+				.withCallback(ctx -> giveItem(plugin, ctx, 1))
+				.withChildren("withAmount", new SimplePluginCommand()
+					.withArgument("amount", NumberArgumentType.TYPE)
+					.withCallback(
+						ctx -> giveItem(plugin, ctx, ctx.getArgument("amount", NumberArgumentType.TYPE).intValue()))))
 			.withChildren("edit", new SimplePluginCommand()
 				.withArgument("id", new RegistryArgumentType(plugin.getItems()::getAllIDs))
 				.withCallback(ctx -> {
@@ -69,6 +69,18 @@ public class PojoAdminCommand extends CommandExecutorWrapper {
 					EditorGUI gui = target.createGUI(session);
 					player.openInventory(gui.getInventory());
 				}));
+	}
+
+	private static void giveItem(PojoPlugin plugin, CommandContext ctx, int amount) {
+		Player player = ctx.getArgument("player", PlayerArgumentType.TYPE);
+		UserDefinedId id = ctx.getArgument("id", UserDefinedIdArgumentType.TYPE);
+		PojoItem item = plugin.getItems().get(id);
+		if (item == null) throw new CommandException("Item with ID " + id + " does not exists");
+
+		ItemStack stack = item.createNew(false);
+		stack.setAmount(amount);
+		player.getInventory().addItem(stack);
+		ctx.feedback("&aGave " + player.getName() + " " + amount + "x " + id + "!");
 	}
 
 	private static SimplePluginCommand editor(PojoPlugin plugin) {
