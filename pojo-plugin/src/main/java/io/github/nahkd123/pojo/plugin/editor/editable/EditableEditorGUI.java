@@ -117,7 +117,7 @@ public abstract class EditableEditorGUI extends EditorGUI {
 
 				@Override
 				public ItemStack createIcon(EditableBool editable) {
-					return new StackBuilder(new ItemStack(editable.getDescription().icon()))
+					return new StackBuilder(new ItemStack(editable.getValue() ? Material.LIME_DYE : Material.GRAY_DYE))
 						.name("&6Boolean: &e" + editable.getDescription().name())
 						.appendLore(Stream.of(editable.getDescription().description())
 							.map(s -> "&7" + TextUtils.colorize(s))
