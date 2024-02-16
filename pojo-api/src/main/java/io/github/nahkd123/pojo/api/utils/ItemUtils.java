@@ -1,16 +1,11 @@
 package io.github.nahkd123.pojo.api.utils;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemUtils {
 	public static String toFriendlyName(Material mat) {
-		return Stream.of(mat.toString().split("_"))
-			.map(v -> v.substring(0, 1).toUpperCase() + v.substring(1).toLowerCase())
-			.collect(Collectors.joining(" "));
+		return EnumUtils.toFriendlyName(mat);
 	}
 
 	public static String toFriendlyName(ItemStack stack) {

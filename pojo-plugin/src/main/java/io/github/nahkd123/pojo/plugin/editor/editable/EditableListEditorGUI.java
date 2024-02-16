@@ -73,6 +73,7 @@ public class EditableListEditorGUI extends ListLikeEditableEditorGUI {
 			if (newIdx < 0 || newIdx >= allEditables.size()) return;
 
 			this.editable.swap(idx, newIdx);
+			getCurrent().save();
 			refresh();
 			return;
 		}

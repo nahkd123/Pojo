@@ -112,6 +112,7 @@ public abstract class EditableEditorGUI extends EditorGUI {
 			new EditableClickProcessor<>() {
 				public void onClick(EditableBool editable, InventoryClickEvent event, EditableEditorGUI gui) {
 					editable.setValue(!editable.getValue());
+					gui.current.save();
 					gui.refresh();
 				};
 

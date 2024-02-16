@@ -96,12 +96,14 @@ public class EditableIntegerEditorGUI extends EditableEditorGUI {
 			int direction = event.isLeftClick() ? 1 : -1;
 			if (event.isShiftClick()) direction *= 10;
 			editable.setValue(editable.getValue() + direction);
+			getCurrent().save();
 			refresh();
 			return;
 		}
 
 		if (event.getSlot() == 9 * 2 + 6) {
 			editable.setValue(0);
+			getCurrent().save();
 			refresh();
 			return;
 		}

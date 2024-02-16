@@ -74,6 +74,7 @@ public class EditableStringEditorGUI extends EditableEditorGUI {
 
 		if (event.getSlot() == 9 * 2 + 6) {
 			editable.setValue(null);
+			getCurrent().save();
 			refresh();
 			return;
 		}

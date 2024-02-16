@@ -55,9 +55,21 @@ public class DisplayComponent implements DatalessComponent, EditorSupportedCompo
 
 	public Material getMaterial() { return material; }
 
+	public void setMaterial(Material material) { this.material = material; }
+
 	public String getName() { return name; }
 
+	public void setName(String name) { this.name = name; }
+
 	public List<String> getLore() { return lore; }
+
+	public int getModelId() { return modelId; }
+
+	public void setModelId(int modelId) { this.modelId = modelId; }
+
+	public boolean isHideAllFlags() { return hideAllFlags; }
+
+	public void setHideAllFlags(boolean hideAllFlags) { this.hideAllFlags = hideAllFlags; }
 
 	public static void regisertFactory(NamespacedKey typeId) {
 		ComponentsFactory<Void> factory = new EditorComponentsFactory<Void>() {
@@ -87,6 +99,8 @@ public class DisplayComponent implements DatalessComponent, EditorSupportedCompo
 		if (material != null) config.set("material", material.toString());
 		if (name != null) config.set("name", name);
 		if (lore.size() > 0) config.set("lore", lore);
+		config.set("modelId", modelId);
+		config.set("hideAllFlags", hideAllFlags);
 	}
 
 	@Override

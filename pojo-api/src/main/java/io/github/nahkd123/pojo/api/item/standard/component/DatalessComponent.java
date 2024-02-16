@@ -25,26 +25,30 @@ public interface DatalessComponent extends Component<Void> {
 		return applyMaterial(current, displayMode);
 	}
 
-	public Material applyMaterial(Material current, boolean displayMode);
+	default Material applyMaterial(Material current, boolean displayMode) {
+		return current;
+	}
 
 	@Override
 	default String applyName(Void data, String current, boolean displayMode) {
 		return applyName(current, displayMode);
 	}
 
-	public String applyName(String current, boolean displayMode);
+	default String applyName(String current, boolean displayMode) {
+		return current;
+	}
 
 	@Override
 	default void applyLore(Void data, LoreSorter lore, boolean displayMode) {
 		applyLore(lore, displayMode);
 	}
 
-	public void applyLore(LoreSorter lore, boolean displayMode);
+	default void applyLore(LoreSorter lore, boolean displayMode) {}
 
 	@Override
 	default void applyPostDisplay(Void data, ItemMeta meta, boolean displayMode) {
 		applyPostDisplay(meta, displayMode);
 	}
 
-	public void applyPostDisplay(ItemMeta meta, boolean displayMode);
+	default void applyPostDisplay(ItemMeta meta, boolean displayMode) {}
 }

@@ -24,6 +24,7 @@ import io.github.nahkd123.pojo.plugin.editor.EditorSession;
 import io.github.nahkd123.pojo.plugin.event.InventoryEventsListener;
 import io.github.nahkd123.pojo.plugin.event.PlayerChatEventsListener;
 import io.github.nahkd123.pojo.plugin.item.standard.component.DisplayComponent;
+import io.github.nahkd123.pojo.plugin.item.standard.component.ItemFlagsComponent;
 import io.github.nahkd123.pojo.plugin.recycle.RecycleBin;
 import io.github.nahkd123.pojo.plugin.registry.PersistentItemsRegistry;
 
@@ -55,6 +56,7 @@ public class PojoPlugin extends JavaPlugin {
 
 		// Item components
 		DisplayComponent.regisertFactory(new NamespacedKey(this, "display"));
+		ItemFlagsComponent.registerFactory(new NamespacedKey(this, "item_flags"));
 	}
 
 	@Override

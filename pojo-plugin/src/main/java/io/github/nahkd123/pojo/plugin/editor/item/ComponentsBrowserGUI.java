@@ -145,6 +145,7 @@ public class ComponentsBrowserGUI extends EditorGUI {
 				if (!(factory instanceof DefaultedComponentsFactory<?> defaulted)) return;
 				Component<?> component = defaulted.createDefault();
 				previous.getItem().getComponents().add(component);
+				previous.getCurrent().save();
 
 				if (component instanceof EditorSupportedComponent<?> esc) {
 					EditableObject proxy = new EditableObject(esc.getEditorDescription(), esc.getEditorNodes());

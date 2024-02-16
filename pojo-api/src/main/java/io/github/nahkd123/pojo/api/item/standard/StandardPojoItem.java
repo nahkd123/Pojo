@@ -37,13 +37,22 @@ public class StandardPojoItem implements PojoItem {
 		if (componentsConfig != null) {
 			for (String name : componentsConfig.getKeys(false)) {
 				ConfigurationSection component = componentsConfig.getConfigurationSection(name);
-				if (!component.contains("type")) continue; // TODO warn
+				if (!component.contains("type")) {
+					PojoInternal.instance().getPlugin().getLogger()
+						.warning("Items: " + id + ": Component '" + name + "' does not have 'type' field");
+					continue;
+				}
+
 				NamespacedKey type = NamespacedKey.fromString(
 					component.getString("type"),
 					PojoInternal.instance().getPlugin());
 
 				ComponentsFactory<?> factory = ComponentsFactory.getAllFactories().get(type);
-				if (factory == null) continue; // TODO warn
+				if (factory == null) {
+					PojoInternal.instance().getPlugin().getLogger()
+						.warning("Items: " + id + ": Component with type '" + type + "' is not registered!");
+					continue;
+				}
 
 				Component<?> c = factory.createFromConfig(component);
 				components.add(c);
