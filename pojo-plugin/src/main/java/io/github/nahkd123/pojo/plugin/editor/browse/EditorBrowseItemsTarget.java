@@ -13,7 +13,7 @@ import io.github.nahkd123.pojo.plugin.editor.EditorTarget;
 import io.github.nahkd123.pojo.plugin.gui.StackBuilder;
 
 public class EditorBrowseItemsTarget implements EditorTarget {
-	public static final ItemStack DISPLAY = new StackBuilder(new ItemStack(Material.CHEST))
+	public static final ItemStack DISPLAY = new StackBuilder(new ItemStack(Material.BOOK))
 		.name("&eBrowse Items")
 		.appendLore("&7&oBrowse all items in this tab.")
 		.getStack();
