@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -14,6 +15,12 @@ public class StackBuilder {
 
 	public StackBuilder(ItemStack stack) {
 		this.stack = stack;
+
+		// Secretly remove all vanilla lore
+		// TODO Make this an actual method instead
+		ItemMeta meta = stack.getItemMeta();
+		meta.addItemFlags(ItemFlag.values());
+		stack.setItemMeta(meta);
 	}
 
 	public StackBuilder name(String name) {
