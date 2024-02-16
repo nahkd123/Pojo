@@ -6,7 +6,6 @@ import java.util.random.RandomGenerator;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import io.github.nahkd123.pojo.expansion.stat.StatFormulaValue;
 import xyz.mangostudio.mangoscript.runtime.execution.Evaluator;
 
 /**
@@ -28,6 +27,8 @@ public interface StatValue {
 	 * @return The generated value.
 	 */
 	public double get(RandomGenerator random);
+
+	default String getDisplayText() { return toString(); }
 
 	public static StatValue fromConfig(ConfigurationSection root, String key) {
 		if (!root.contains(key)) return new StatConstantValue(0d);

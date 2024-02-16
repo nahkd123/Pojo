@@ -1,8 +1,7 @@
-package io.github.nahkd123.pojo.expansion.stat;
+package io.github.nahkd123.pojo.expansion.stat.value;
 
 import java.util.random.RandomGenerator;
 
-import io.github.nahkd123.pojo.expansion.stat.value.StatValue;
 import xyz.mangostudio.mangoscript.binary.expr.Expression;
 import xyz.mangostudio.mangoscript.runtime.execution.Evaluator;
 import xyz.mangostudio.mangoscript.runtime.execution.ExecutionContext;
@@ -45,4 +44,7 @@ public class StatFormulaValue implements StatValue {
 		Value value = Evaluator.evaluate(exec, compiledFormula);
 		return value instanceof NumberValue num ? num.getJvmNumber().doubleValue() : 0d;
 	}
+
+	@Override
+	public String getDisplayText() { return "&e&o" + formula; } // TODO highlighting with tokenizer
 }

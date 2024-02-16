@@ -119,6 +119,13 @@ public class AttributeStat implements Stat {
 	}
 
 	@Override
+	public String getEditorText() {
+		return "&7Attribute/&f"
+			+ (attribute != null ? EnumUtils.toFriendlyName(attribute) : "&oEmpty")
+			+ "&7: " + EnumUtils.toFriendlyName(operation) + ": &f" + value.getDisplayText();
+	}
+
+	@Override
 	public String toString() {
 		return "attribute: " + attribute + ", " + operation + ", " + value;
 	}

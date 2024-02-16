@@ -25,4 +25,7 @@ public record StatRangeValue(StatValue min, StatValue max, double exponent) impl
 		if (min instanceof StatConstantValue cons) return cons.value();
 		return min.get(new Random());
 	}
+
+	@Override
+	public String getDisplayText() { return "&7[" + min + "&7; " + max + "&7]"; }
 }

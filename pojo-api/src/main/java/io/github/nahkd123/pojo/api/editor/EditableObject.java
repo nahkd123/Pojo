@@ -40,9 +40,14 @@ public final class EditableObject implements Editable {
 			.toList();
 	}
 
+	public EditableObject setCustomPreviewLines(Supplier<List<String>> customPreviewLines) {
+		this.customPreviewLines = customPreviewLines;
+		return this;
+	}
+
 	public static <T> EditableObject enumToBooleans(NodeDescription description, Collection<T> values, Supplier<T> getter, Consumer<T> setter, Function<T, NodeDescription> describer) {
 		// @formatter:off
-		EditableObject obj = new EditableObject(
+		return new EditableObject(
 			description,
 			values.stream().map(v -> (Editable) new EditableBool(
 				describer.apply(v),
@@ -51,11 +56,8 @@ public final class EditableObject implements Editable {
 					if (!s) return;
 					setter.accept(v);
 				}))
-			.toList()
-		);
+			.toList())
+			.setCustomPreviewLines(() -> Collections.singletonList("&a" + describer.apply(getter.get()).name()));
 		// @formatter:on
-
-		obj.customPreviewLines = () -> Collections.singletonList("&a" + describer.apply(getter.get()).name());
-		return obj;
 	}
 }

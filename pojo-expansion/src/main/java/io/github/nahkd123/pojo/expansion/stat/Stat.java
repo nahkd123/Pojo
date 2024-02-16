@@ -18,6 +18,7 @@ import io.github.nahkd123.pojo.api.editor.EditableObject;
 import io.github.nahkd123.pojo.api.editor.EditableString;
 import io.github.nahkd123.pojo.api.editor.NodeDescription;
 import io.github.nahkd123.pojo.expansion.stat.value.StatConstantValue;
+import io.github.nahkd123.pojo.expansion.stat.value.StatFormulaValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatRangeValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatValue;
 
@@ -46,6 +47,8 @@ public interface Stat {
 	public boolean canBeDisplayed();
 
 	public String getTranslationKey();
+
+	default String getEditorText() { return toString(); }
 
 	default void applyToItemMeta(ItemMeta meta, double value, EquipmentSlot slot) {}
 
@@ -141,7 +144,6 @@ public interface Stat {
 				v -> setter.accept(new StatFormulaValue(v))
 			));
 		// @formatter:on
-
 		return list;
 	}
 }

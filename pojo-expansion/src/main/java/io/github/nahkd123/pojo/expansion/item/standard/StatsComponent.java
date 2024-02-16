@@ -2,6 +2,7 @@ package io.github.nahkd123.pojo.expansion.item.standard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -212,7 +213,8 @@ public class StatsComponent implements Component<Long>, EditorSupportedComponent
 						list.addAll(current.getEditableParameters());
 						return list;
 					}
-				),
+				)
+				.setCustomPreviewLines(() -> Collections.singletonList(stats.get(index) != null ? stats.get(index).getEditorText() : "&7&o(Empty slot)")),
 				index -> stats.add(index, null),
 				index -> stats.remove(index),
 				(from, to) -> {
