@@ -29,7 +29,7 @@ Pojo Scripts are powered by [MangoScript](https://github.com/MangoPlex/MangoScri
         + [x] Vanilla attributes
         + [ ] Hook with other plugins (mainly RPG plugins)
     + [ ] Gemstones component
-        + [ ] Allow other components to modify a component's output (quite complicated I'd say)
+        + [x] Allow other components to modify a component's output (quite complicated I'd say)
         + [ ] Item type filtering (eg: only apply effects from `pojo:gemstones` type)
 - [ ] Custom blocks
 - [ ] Scripting support
