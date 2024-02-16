@@ -3,13 +3,9 @@ package io.github.nahkd123.pojo.expansion.item.standard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
-import java.util.random.RandomGenerator;
 import java.util.stream.Stream;
 
 import org.bukkit.Material;
@@ -39,10 +35,11 @@ import io.github.nahkd123.pojo.expansion.stat.StatFactory;
 import io.github.nahkd123.pojo.expansion.stat.StatLocalizer;
 import io.github.nahkd123.pojo.expansion.stat.StatOperation;
 import io.github.nahkd123.pojo.expansion.stat.StatsLocalizer;
+import io.github.nahkd123.pojo.expansion.stat.compute.ComputedStats;
 import io.github.nahkd123.pojo.expansion.stat.value.StatConstantValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatValue;
 
-public class StatsComponent implements Component<Long>, EditorSupportedComponent<Long> {
+public class StatsComponent implements Component<ComputedStats>, EditorSupportedComponent<ComputedStats> {
 	private static final NodeDescription DESCRIPTION = new NodeDescription(Material.DIAMOND_SWORD, "Pojo Expansion: Stats", new String[] {
 		"Add stats to this item."
 	});
@@ -68,14 +65,14 @@ public class StatsComponent implements Component<Long>, EditorSupportedComponent
 	public List<Stat> getStats() { return stats; }
 
 	public static void registerFactory(NamespacedKey typeId, Supplier<StatsLocalizer> localizer, LongSupplier seedGenerator) {
-		ComponentsFactory<Long> factory = new EditorComponentsFactory<>() {
+		ComponentsFactory<ComputedStats> factory = new EditorComponentsFactory<>() {
 			@Override
 			public StatsComponent createDefault() {
 				return new StatsComponent(typeId, localizer, seedGenerator, null, new ArrayList<>());
 			}
 
 			@Override
-			public Component<Long> createFromConfig(ConfigurationSection config) {
+			public StatsComponent createFromConfig(ConfigurationSection config) {
 				StatsComponent component = createDefault();
 				if (config.contains("equipmentSlot"))
 					component.slot = EquipmentSlot.valueOf(config.getString("equipmentSlot"));
@@ -228,22 +225,23 @@ public class StatsComponent implements Component<Long>, EditorSupportedComponent
 	public NamespacedKey getTypeId() { return typeId; }
 
 	@Override
-	public Long createNewData() {
-		return seedGenerator.getAsLong();
+	public ComputedStats createNewData() {
+		return new ComputedStats(seedGenerator.getAsLong(), slot, stats);
 	}
 
 	@Override
-	public void storeDataTo(PersistentDataContainer container, Long data) {
-		container.set(typeId, PersistentDataType.LONG, data);
+	public void storeDataTo(PersistentDataContainer container, ComputedStats data) {
+		container.set(typeId, PersistentDataType.LONG, data.getSeed());
 	}
 
 	@Override
-	public Long loadDataFrom(PersistentDataContainer container) {
-		return container.getOrDefault(typeId, PersistentDataType.LONG, 0L);
+	public ComputedStats loadDataFrom(PersistentDataContainer container) {
+		long seed = container.getOrDefault(typeId, PersistentDataType.LONG, 0L);
+		return new ComputedStats(seed, slot, stats);
 	}
 
 	@Override
-	public void applyLore(Long data, LoreSorter lore, boolean displayMode) {
+	public void applyLore(ComputedStats data, LoreSorter lore, boolean displayMode) {
 		LoreSection section = lore.getOrCreate(new UserDefinedId(typeId));
 
 		if (displayMode) {
@@ -255,10 +253,9 @@ public class StatsComponent implements Component<Long>, EditorSupportedComponent
 				section.getLines().add(lineContent);
 			}
 		} else {
-			RandomGenerator random = new Random(data != null ? data : 0);
 			for (Stat stat : stats) {
 				if (stat == null || !stat.canBeDisplayed()) return;
-				double value = stat.getStatValue().get(random);
+				double value = data.get(stat).getValue();
 				StatLocalizer localizer = this.localizer.get().getLocalizer(stat);
 				String name = localizer.getName() != null ? localizer.getName() : stat.getTranslationKey();
 				section.getLines().add(localizer.localize(name, stat.getOperation(), value));
@@ -267,23 +264,11 @@ public class StatsComponent implements Component<Long>, EditorSupportedComponent
 	}
 
 	@Override
-	public void applyPostDisplay(Long data, ItemMeta meta, boolean displayMode) {
+	public void applyPostDisplay(ComputedStats data, ItemMeta meta, boolean displayMode) {
 		if (displayMode) return;
-		RandomGenerator random = new Random(data != null ? data : 0);
 
 		// Clear all modifiers so that AttributeStat can add new modifiers
 		meta.setAttributeModifiers(null);
-		for (Stat stat : stats) stat.applyToItemMeta(meta, stat.getStatValue().get(random), slot);
-	}
-
-	public static Map<Stat, Double> calculateStats(long seed, List<Stat> stats) {
-		Map<Stat, Double> map = new HashMap<>();
-		RandomGenerator rng = new Random(seed);
-		for (Stat stat : stats) map.put(stat, stat.getStatValue().get(rng));
-		return map;
-	}
-
-	public Map<Stat, Double> calculateStats(long seed) {
-		return calculateStats(seed, stats);
+		for (Stat stat : stats) stat.applyToItemMeta(meta, data.get(stat).getValue(), slot);
 	}
 }

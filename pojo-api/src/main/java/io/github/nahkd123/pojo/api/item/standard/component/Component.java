@@ -12,6 +12,12 @@ import io.github.nahkd123.pojo.api.utils.lore.LoreSorter;
  * An interface for all kinds of item component. Use {@link DatalessComponent}
  * if your component doesn't need to store anything into the item.
  * </p>
+ * <p>
+ * <b>Apply flow</b>: Data are created or loaded first, then
+ * {@link #applyToOtherComponent(Object, ComponentDataHolder)}, after that it
+ * will be some stuffs related to display and then
+ * {@link #applyPostDisplay(Object, ItemMeta, boolean)}.
+ * </p>
  * 
  * @param <T> The type of component data.
  * @see DatalessComponent
@@ -44,4 +50,6 @@ public interface Component<T> {
 	default void applyLore(T data, LoreSorter lore, boolean displayMode) {}
 
 	default void applyPostDisplay(T data, ItemMeta meta, boolean displayMode) {}
+
+	default void applyToOtherComponent(T data, ComponentDataHolder others) {}
 }

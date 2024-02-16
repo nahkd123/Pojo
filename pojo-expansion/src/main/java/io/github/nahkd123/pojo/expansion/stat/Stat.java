@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,6 +18,7 @@ import io.github.nahkd123.pojo.api.editor.EditableDouble;
 import io.github.nahkd123.pojo.api.editor.EditableObject;
 import io.github.nahkd123.pojo.api.editor.EditableString;
 import io.github.nahkd123.pojo.api.editor.NodeDescription;
+import io.github.nahkd123.pojo.expansion.stat.provided.AttributeStat;
 import io.github.nahkd123.pojo.expansion.stat.value.StatConstantValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatFormulaValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatRangeValue;
@@ -47,6 +49,24 @@ public interface Stat {
 	public boolean canBeDisplayed();
 
 	public String getTranslationKey();
+
+	/**
+	 * <p>
+	 * Matching key is a special object that will be used for comparing 2
+	 * {@link Stat} to see if they are referring to the same stat type.
+	 * </p>
+	 * <p>
+	 * For example, 2 {@link AttributeStat} with the same {@link Attribute} will
+	 * have the same matching key.
+	 * </p>
+	 * <p>
+	 * This matching key is usually used by gemstones to modify the final item
+	 * stats.
+	 * </p>
+	 * 
+	 * @return The stat matching key.
+	 */
+	public Object getMatchingKey();
 
 	default String getEditorText() { return toString(); }
 

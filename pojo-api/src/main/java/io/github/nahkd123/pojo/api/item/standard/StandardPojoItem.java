@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import io.github.nahkd123.pojo.api.internal.PojoInternal;
 import io.github.nahkd123.pojo.api.item.PojoItem;
 import io.github.nahkd123.pojo.api.item.standard.component.Component;
+import io.github.nahkd123.pojo.api.item.standard.component.ComponentDataHolder;
 import io.github.nahkd123.pojo.api.item.standard.component.ComponentsFactory;
 import io.github.nahkd123.pojo.api.item.standard.component.SaveableComponent;
 import io.github.nahkd123.pojo.api.registry.UserDefinedId;
@@ -85,14 +86,26 @@ public class StandardPojoItem implements PojoItem {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public ItemStack createNew(boolean displayMode) {
+		Map<Component<?>, Object> dataMap = new HashMap<>();
+		ComponentDataHolder dataHolder = ComponentDataHolder.newHolder();
+
+		// 1. Initialize
+		for (Component component : components) {
+			Object obj = component.createNewData();
+			dataMap.put(component, obj);
+			dataHolder.addRaw(component.getClass(), obj);
+		}
+
+		// 2. Manipulate
+		for (Component component : components) component.applyToOtherComponent(dataMap.get(component), dataHolder);
+
+		// 3. Display
 		Material mat = Material.STONE;
 		String name = null;
 		LoreSorter lore = new LoreSorter(loreSections);
-		Map<Component<?>, Object> data = new HashMap<>();
 
 		for (Component component : components) {
-			Object obj = component.createNewData();
-			data.put(component, obj);
+			Object obj = dataMap.get(component);
 			mat = component.applyMaterial(obj, mat, displayMode);
 			name = component.applyName(obj, name, displayMode);
 			component.applyLore(obj, lore, displayMode);
@@ -105,10 +118,12 @@ public class StandardPojoItem implements PojoItem {
 
 		if (name != null) meta.setDisplayName(name);
 		if (loreList.size() > 0) meta.setLore(loreList);
-		for (Component component : components) component.applyPostDisplay(data.get(component), meta, displayMode);
+
+		// 4. Post display & store data
+		for (Component component : components) component.applyPostDisplay(dataMap.get(component), meta, displayMode);
 
 		for (Component component : components) {
-			Object obj = data.get(component);
+			Object obj = dataMap.get(component);
 			component.storeDataTo(meta.getPersistentDataContainer(), obj);
 		}
 
@@ -120,13 +135,25 @@ public class StandardPojoItem implements PojoItem {
 	@Override
 	public ItemMeta updateMeta(ItemMeta source, boolean displayMode) {
 		source = PojoItem.super.updateMeta(source, displayMode);
-		String name = null;
-		LoreSorter lore = new LoreSorter(loreSections);
-		Map<Component<?>, Object> data = new HashMap<>();
+		Map<Component<?>, Object> dataMap = new HashMap<>();
+		ComponentDataHolder dataHolder = ComponentDataHolder.newHolder();
 
+		// 1. Load
 		for (Component component : components) {
 			Object obj = component.loadDataFrom(source.getPersistentDataContainer());
-			data.put(component, obj);
+			dataMap.put(component, obj);
+			dataHolder.addRaw(component.getClass(), obj);
+		}
+
+		// 2. Manipulate
+		for (Component component : components) component.applyToOtherComponent(dataMap.get(component), dataHolder);
+
+		// 3. Display
+		String name = null;
+		LoreSorter lore = new LoreSorter(loreSections);
+
+		for (Component component : components) {
+			Object obj = dataMap.get(component);
 			name = component.applyName(obj, name, displayMode);
 			component.applyLore(obj, lore, displayMode);
 		}
@@ -134,7 +161,9 @@ public class StandardPojoItem implements PojoItem {
 		List<String> loreList = lore.build();
 		if (name != null) source.setLocalizedName(name);
 		if (loreList.size() > 0) source.setLore(loreList);
-		for (Component component : components) component.applyPostDisplay(data.get(component), source, displayMode);
+
+		// 4. Post display (storing data is not included atm)
+		for (Component component : components) component.applyPostDisplay(dataMap.get(component), source, displayMode);
 		return source;
 	}
 }

@@ -53,6 +53,9 @@ public class AttributeStat implements Stat {
 	@Override
 	public void setOperation(StatOperation operation) { this.operation = operation; }
 
+	@Override
+	public Object getMatchingKey() { return attribute; }
+
 	public static void registerFactory(NamespacedKey typeId) {
 		StatFactory factory = new StatFactory() {
 			@Override
