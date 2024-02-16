@@ -17,12 +17,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.nahkd123.pojo.api.internal.PojoInternal;
 import io.github.nahkd123.pojo.api.internal.PojoKeys;
-import io.github.nahkd123.pojo.api.item.standard.component.DisplayComponent;
 import io.github.nahkd123.pojo.api.utils.TextUtils;
 import io.github.nahkd123.pojo.plugin.command.provided.PojoAdminCommand;
 import io.github.nahkd123.pojo.plugin.editor.EditorSession;
 import io.github.nahkd123.pojo.plugin.event.InventoryEventsListener;
 import io.github.nahkd123.pojo.plugin.event.PlayerChatEventsListener;
+import io.github.nahkd123.pojo.plugin.item.standard.component.DisplayComponent;
 import io.github.nahkd123.pojo.plugin.recycle.RecycleBin;
 import io.github.nahkd123.pojo.plugin.registry.PersistentItemsRegistry;
 

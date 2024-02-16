@@ -1,4 +1,4 @@
-package io.github.nahkd123.pojo.api.item.standard.component;
+package io.github.nahkd123.pojo.plugin.item.standard.component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +16,11 @@ import io.github.nahkd123.pojo.api.editor.EditableInteger;
 import io.github.nahkd123.pojo.api.editor.EditableList;
 import io.github.nahkd123.pojo.api.editor.EditableString;
 import io.github.nahkd123.pojo.api.editor.NodeDescription;
+import io.github.nahkd123.pojo.api.item.standard.component.Component;
+import io.github.nahkd123.pojo.api.item.standard.component.ComponentsFactory;
+import io.github.nahkd123.pojo.api.item.standard.component.DatalessComponent;
+import io.github.nahkd123.pojo.api.item.standard.component.EditorComponentsFactory;
+import io.github.nahkd123.pojo.api.item.standard.component.EditorSupportedComponent;
 import io.github.nahkd123.pojo.api.registry.UserDefinedId;
 import io.github.nahkd123.pojo.api.utils.TextUtils;
 import io.github.nahkd123.pojo.api.utils.lore.LoreSorter;
