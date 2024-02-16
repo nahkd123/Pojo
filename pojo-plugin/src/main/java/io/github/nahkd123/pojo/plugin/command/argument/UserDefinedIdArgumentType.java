@@ -20,6 +20,10 @@ public class UserDefinedIdArgumentType implements ArgumentType<UserDefinedId> {
 
 	@Override
 	public Optional<UserDefinedId> tryParse(WordsStream stream) {
-		return Optional.of(UserDefinedId.fromString(stream.next()));
+		try {
+			return Optional.of(UserDefinedId.fromString(stream.next()));
+		} catch (IllegalArgumentException e) {
+			return Optional.empty();
+		}
 	}
 }

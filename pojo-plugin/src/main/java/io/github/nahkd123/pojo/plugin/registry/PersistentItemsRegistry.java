@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -30,7 +31,16 @@ public class PersistentItemsRegistry implements ItemsRegistry {
 		this.itemsFolder = itemsFolder;
 
 		YamlConfiguration config = plugin.getOrSaveConfig("items-config.yml");
-		loreSections = config.getStringList("loreOrdering").stream().map(UserDefinedId::fromString).toList();
+		loreSections = config.getStringList("loreOrdering").stream()
+			.flatMap(s -> {
+				try {
+					return Stream.of(UserDefinedId.fromString(s));
+				} catch (IllegalArgumentException e) {
+					plugin.getLogger().warning("items-config.yml/loreOrdering: Invaild ID: " + s);
+					return Stream.of();
+				}
+			})
+			.toList();
 	}
 
 	public File getItemFile(UserDefinedId id) {
