@@ -12,8 +12,8 @@ public record UserDefinedId(String namespace, String id) {
 	public UserDefinedId {
 		if (!validate(namespace, "abcdefghijklmnopqrstuvwxyz0123456789-_"))
 			throw new IllegalArgumentException("Namespace '" + namespace + "' does not match [a-z0-9-_] pattern");
-		if (!validate(id, "abcdefghijklmnopqrstuvwxyz0123456789-_/"))
-			throw new IllegalArgumentException("ID '" + id + "' does not match [a-z0-9-_/] pattern");
+		if (!validate(id, "abcdefghijklmnopqrstuvwxyz0123456789-_/."))
+			throw new IllegalArgumentException("ID '" + id + "' does not match [a-z0-9-_/.] pattern");
 	}
 
 	/**
