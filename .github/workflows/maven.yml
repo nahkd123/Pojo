@@ -28,5 +28,5 @@ jobs:
       with:
         name: Pojo Plugins
         path: |
-          pojo-plugin/target/*.jar
-          pojo-expansion/target/*.jar
+          pojo-plugin/target/pojo-*.jar
+          pojo-expansion/target/pojo-*.jar
