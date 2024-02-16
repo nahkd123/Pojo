@@ -97,6 +97,7 @@ public class EditorBrowseItemsGUI extends EditorGUI {
 				if (gui == null) return;
 
 				getSession().replaceTarget(current, target);
+				gui.refresh();
 				event.getWhoClicked().openInventory(gui.getInventory());
 			}
 		}

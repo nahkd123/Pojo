@@ -99,12 +99,12 @@ public abstract class EditorGUI implements PluginGUI {
 			}
 
 			int clickedIdx = currentPage * 7 + clickedSlot - 1;
-			if (clickedIdx >= icons) {
+			if (clickedIdx == icons) {
 				EditorBrowseItemsTarget target = new EditorBrowseItemsTarget(session.getPlugin().getItems(), 0);
 				session.getTargets().add(target);
 				EditorGUI gui = target.createGUI(session);
 				event.getWhoClicked().openInventory(gui.inventory);
-			} else {
+			} else if (clickedIdx >= 0 && clickedIdx < icons) {
 				EditorTarget tabTarget = session.getTargets().get(clickedIdx);
 
 				if (event.isRightClick()) {
