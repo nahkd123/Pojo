@@ -7,19 +7,18 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import org.bukkit.inventory.EquipmentSlot;
-
 import io.github.nahkd123.pojo.expansion.stat.Stat;
+import io.github.nahkd123.pojo.expansion.utils.PojoEquipmentSlot;
 
 public class ComputedStats {
 	private Long seed;
-	private EquipmentSlot equipmentSlot;
+	private PojoEquipmentSlot equipmentSlot;
 	private List<Stat> stats;
 	private Random random;
 	private Map<Object, ComputedStat> map = new HashMap<>();
 	private Set<Object> matchingKeys = new HashSet<>();
 
-	public ComputedStats(Long seed, EquipmentSlot equipmentSlot, List<Stat> stats) {
+	public ComputedStats(Long seed, PojoEquipmentSlot equipmentSlot, List<Stat> stats) {
 		this.seed = seed;
 		this.equipmentSlot = equipmentSlot;
 		this.stats = stats;
@@ -32,7 +31,7 @@ public class ComputedStats {
 
 	public Long getSeed() { return seed; }
 
-	public EquipmentSlot getEquipmentSlot() { return equipmentSlot; }
+	public PojoEquipmentSlot getEquipmentSlot() { return equipmentSlot; }
 
 	public List<Stat> getStats() { return stats; }
 

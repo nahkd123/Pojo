@@ -6,12 +6,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -38,6 +36,7 @@ import io.github.nahkd123.pojo.expansion.stat.StatsLocalizer;
 import io.github.nahkd123.pojo.expansion.stat.compute.ComputedStats;
 import io.github.nahkd123.pojo.expansion.stat.value.StatConstantValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatValue;
+import io.github.nahkd123.pojo.expansion.utils.PojoEquipmentSlot;
 
 public class StatsComponent implements Component<ComputedStats>, EditorSupportedComponent<ComputedStats> {
 	private static final NodeDescription DESCRIPTION = new NodeDescription(Material.DIAMOND_SWORD, "Pojo Expansion: Stats", new String[] {
@@ -47,10 +46,10 @@ public class StatsComponent implements Component<ComputedStats>, EditorSupported
 	private NamespacedKey typeId;
 	private Supplier<StatsLocalizer> localizer;
 	private LongSupplier seedGenerator;
-	private EquipmentSlot slot;
+	private PojoEquipmentSlot slot;
 	private List<Stat> stats;
 
-	public StatsComponent(NamespacedKey typeId, Supplier<StatsLocalizer> localizer, LongSupplier seedGenerator, EquipmentSlot slot, List<Stat> stats) {
+	public StatsComponent(NamespacedKey typeId, Supplier<StatsLocalizer> localizer, LongSupplier seedGenerator, PojoEquipmentSlot slot, List<Stat> stats) {
 		this.typeId = typeId;
 		this.localizer = localizer;
 		this.seedGenerator = seedGenerator;
@@ -58,9 +57,9 @@ public class StatsComponent implements Component<ComputedStats>, EditorSupported
 		this.stats = stats;
 	}
 
-	public EquipmentSlot getEquipmentSlot() { return slot; }
+	public PojoEquipmentSlot getEquipmentSlot() { return slot; }
 
-	public void setEquipmentSlot(EquipmentSlot slot) { this.slot = slot; }
+	public void setEquipmentSlot(PojoEquipmentSlot slot) { this.slot = slot; }
 
 	public List<Stat> getStats() { return stats; }
 
@@ -68,14 +67,14 @@ public class StatsComponent implements Component<ComputedStats>, EditorSupported
 		ComponentsFactory<ComputedStats> factory = new EditorComponentsFactory<>() {
 			@Override
 			public StatsComponent createDefault() {
-				return new StatsComponent(typeId, localizer, seedGenerator, null, new ArrayList<>());
+				return new StatsComponent(typeId, localizer, seedGenerator, PojoEquipmentSlot.ALL, new ArrayList<>());
 			}
 
 			@Override
 			public StatsComponent createFromConfig(ConfigurationSection config) {
 				StatsComponent component = createDefault();
 				if (config.contains("equipmentSlot"))
-					component.slot = EquipmentSlot.valueOf(config.getString("equipmentSlot"));
+					component.slot = PojoEquipmentSlot.valueOf(config.getString("equipmentSlot"));
 
 				if (config.contains("stats")) {
 					ConfigurationSection allStatsConfig = config.getConfigurationSection("stats");
@@ -149,12 +148,10 @@ public class StatsComponent implements Component<ComputedStats>, EditorSupported
 					"Specify an equipment slot or leave",
 					"it to 'All' to apply to all slots."
 				),
-				Stream.concat(Stream.of(new EquipmentSlot[] { null }), Stream.of(EquipmentSlot.values())).toList(),
+				Arrays.asList(PojoEquipmentSlot.values()),
 				() -> slot,
 				newSlot -> slot = newSlot,
-				slot -> slot != null
-					? new NodeDescription(EnumUtils.toFriendlyName(slot), "Only apply stats in " + EnumUtils.toFriendlyName(slot))
-					: new NodeDescription("All", "Apply stats in all equipment slots")),
+				slot -> slot.getDescription()),
 			new EditableList(
 				new NodeDescription(
 					Material.DIAMOND_SWORD,

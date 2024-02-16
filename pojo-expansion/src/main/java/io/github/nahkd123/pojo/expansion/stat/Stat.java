@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import io.github.nahkd123.pojo.api.editor.Editable;
@@ -23,6 +22,7 @@ import io.github.nahkd123.pojo.expansion.stat.value.StatConstantValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatFormulaValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatRangeValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatValue;
+import io.github.nahkd123.pojo.expansion.utils.PojoEquipmentSlot;
 
 public interface Stat {
 	public NamespacedKey getTypeId();
@@ -70,7 +70,7 @@ public interface Stat {
 
 	default String getEditorText() { return toString(); }
 
-	default void applyToItemMeta(ItemMeta meta, double value, EquipmentSlot slot) {}
+	default void applyToItemMeta(ItemMeta meta, double value, PojoEquipmentSlot slot) {}
 
 	public static enum EditableStatType {
 		CONSTANT(new NodeDescription("Constant value", "The value is always the same")) {

@@ -11,7 +11,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import io.github.nahkd123.pojo.api.editor.Editable;
@@ -22,6 +21,7 @@ import io.github.nahkd123.pojo.expansion.stat.Stat;
 import io.github.nahkd123.pojo.expansion.stat.StatFactory;
 import io.github.nahkd123.pojo.expansion.stat.StatOperation;
 import io.github.nahkd123.pojo.expansion.stat.value.StatValue;
+import io.github.nahkd123.pojo.expansion.utils.PojoEquipmentSlot;
 
 public class AttributeStat implements Stat {
 	private NamespacedKey typeId;
@@ -96,7 +96,7 @@ public class AttributeStat implements Stat {
 	}
 
 	@Override
-	public void applyToItemMeta(ItemMeta meta, double value, EquipmentSlot slot) {
+	public void applyToItemMeta(ItemMeta meta, double value, PojoEquipmentSlot slot) {
 		if (attribute == null) return;
 
 		UUID uuid = UUID.randomUUID();
@@ -110,7 +110,7 @@ public class AttributeStat implements Stat {
 		case ADD_PERCENTAGE -> Operation.ADD_SCALAR;
 		case MULTIPLIER -> Operation.MULTIPLY_SCALAR_1;
 		default -> Operation.ADD_NUMBER;
-		}, slot));
+		}, slot.getBukkit()));
 	}
 
 	@Override
