@@ -23,10 +23,14 @@ Pojo Scripts are powered by [MangoScript](https://github.com/MangoPlex/MangoScri
 - [ ] Social banner image
 - [ ] Custom items
     + [x] Display component (kinda completed?)
-    + [ ] Pojo Expansion: Stats component (hooking with existing stats plugin + attributes)
-    + [ ] Pojo Expansion: Gemstones component
     + [ ] Emit warning when configuration is invalid
 - [ ] Pojo Expansion
+    + [ ] Stats component
+        + [x] Vanilla attributes
+        + [ ] Hook with other plugins (mainly RPG plugins)
+    + [ ] Gemstones component
+        + [ ] Allow other components to modify a component's output (quite complicated I'd say)
+        + [ ] Item type filtering (eg: only apply effects from `pojo:gemstones` type)
 - [ ] Custom blocks
 - [ ] Scripting support
     + [x] [MangoScript](https://github.com/MangoPlex/MangoScript)
