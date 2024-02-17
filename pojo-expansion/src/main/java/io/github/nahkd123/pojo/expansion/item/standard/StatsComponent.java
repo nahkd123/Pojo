@@ -166,7 +166,7 @@ public class StatsComponent implements EditorSupportedComponent<ComputedStats> {
 
 		// Clear all modifiers so that AttributeStat can add new modifiers
 		meta.setAttributeModifiers(null);
-		for (Stat stat : stats) stat.applyToItemMeta(meta, data.get(stat).getValue(), slot);
+		for (Stat stat : data.getStats()) stat.applyToItemMeta(meta, data.get(stat).getValue(), slot);
 	}
 
 	/**
