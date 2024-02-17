@@ -78,7 +78,9 @@ public class PojoAdminCommand extends CommandExecutorWrapper {
 
 					for (int i = 0; i < contents.length; i++) {
 						if (contents[i] == null) continue;
-						if (!(PojoItem.getFrom(contents[i]) instanceof PojoItem item)) continue;
+						PojoItem item = PojoItem.getFrom(contents[i]);
+						if (item == null) continue;
+
 						updated++;
 						contents[i] = item.updateItem(contents[i]);
 					}
