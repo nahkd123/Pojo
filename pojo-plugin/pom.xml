@@ -27,7 +27,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.5.0</version>
+				<version>3.5.1</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -36,6 +36,22 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<filters>
+						<filter>
+							<artifact>xyz.mangostudio:*</artifact>
+							<excludes>
+								<exclude>META-INF/*.MF</exclude>
+							</excludes>
+						</filter>
+						<filter>
+							<artifact>io.github.nahkd123:pojo-api</artifact>
+							<excludes>
+								<exclude>META-INF/*.MF</exclude>
+							</excludes>
+						</filter>
+					</filters>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
