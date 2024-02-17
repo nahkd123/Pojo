@@ -288,8 +288,8 @@ public class StatsComponent implements Component<ComputedStats>, EditorSupported
 		PojoItem item = PojoItem.getFrom(meta);
 		if (!(item instanceof StandardPojoItem std)) return Collections.emptyList();
 
-		ComponentDataHolder dataHolder = std.loadDataFrom(meta);
-		return Collections.unmodifiableList(dataHolder.get(StatsComponent.class));
+		ComponentDataHolder dataHolder = std.loadDataFrom(meta, true);
+		return Collections.unmodifiableList(dataHolder.getList(StatsComponent.class));
 	}
 
 	/**

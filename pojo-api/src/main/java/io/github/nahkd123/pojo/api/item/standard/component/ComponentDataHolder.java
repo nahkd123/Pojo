@@ -11,33 +11,48 @@ import java.util.Map;
  * </p>
  */
 public interface ComponentDataHolder {
-	public <C extends Component<T>, T> List<T> get(Class<C> component);
+	public <C extends Component<T>, T> List<T> getList(Class<C> component);
 
-	public <C extends Component<T>, T> void add(Class<C> type, T data);
+	public <C extends Component<T>, T> T get(C component);
+
+	public <C extends Component<T>, T> void add(C component, T data);
+
+	public Map<Component<?>, ?> getMap();
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	default void addRaw(Class type, Object data) {
-		add(type, data);
+	default void addRaw(Component component, Object data) {
+		add(component, data);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public static ComponentDataHolder newHolder() {
-		Map<Class<?>, List> map = new HashMap<>();
+		Map<Class<?>, List> mapOfLists = new HashMap<>();
+		Map<Component<?>, Object> mapOfData = new HashMap<>();
 
 		return new ComponentDataHolder() {
 			@SuppressWarnings("unchecked")
 			@Override
-			public <C extends Component<T>, T> void add(Class<C> type, T data) {
-				List list = map.get(type);
-				if (list == null) map.put(type, list = new ArrayList());
+			public <C extends Component<T>, T> void add(C component, T data) {
+				List list = mapOfLists.get(component.getClass());
+				if (list == null) mapOfLists.put(component.getClass(), list = new ArrayList());
 				list.add(data);
+				mapOfData.put(component, mapOfData);
 			}
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public <C extends Component<T>, T> List<T> get(Class<C> type) {
-				return (List<T>) map.get(type);
+			public <C extends Component<T>, T> List<T> getList(Class<C> type) {
+				return (List<T>) mapOfLists.get(type);
 			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public <C extends Component<T>, T> T get(C component) {
+				return (T) mapOfData.get(component);
+			}
+
+			@Override
+			public Map<Component<?>, ?> getMap() { return mapOfData; }
 		};
 	}
 }

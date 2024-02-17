@@ -98,6 +98,22 @@ public interface PojoItem extends RegistryEntry {
 
 	/**
 	 * <p>
+	 * Check if the created item contains display flag. Items for displaying have
+	 * different display text comparing to normal items, such as showing the actual
+	 * stats range instead of computed stats.
+	 * </p>
+	 * 
+	 * @param meta The item meta to check.
+	 * @return {@code true} if the item was created with display mode.
+	 */
+	public static boolean isDisplayMode(ItemMeta meta) {
+		if (meta == null) return false;
+		PersistentDataContainer poc = meta.getPersistentDataContainer();
+		return poc.getOrDefault(keys().displayMode, PersistentDataType.BOOLEAN, false);
+	}
+
+	/**
+	 * <p>
 	 * Get the {@link PojoItem} by getting ID from {@link ItemMeta}.
 	 * </p>
 	 * 

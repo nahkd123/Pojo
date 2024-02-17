@@ -1,9 +1,7 @@
 package io.github.nahkd123.pojo.api.item.standard;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -86,18 +84,16 @@ public class StandardPojoItem implements PojoItem {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public ItemStack createNew(boolean displayMode) {
-		Map<Component<?>, Object> dataMap = new HashMap<>();
 		ComponentDataHolder dataHolder = ComponentDataHolder.newHolder();
 
 		// 1. Initialize
 		for (Component component : components) {
-			Object obj = component.createNewData();
-			dataMap.put(component, obj);
-			dataHolder.addRaw(component.getClass(), obj);
+			Object data = component.createNewData();
+			dataHolder.addRaw(component, data);
 		}
 
 		// 2. Manipulate
-		for (Component component : components) component.applyToOtherComponent(dataMap.get(component), dataHolder);
+		for (Component component : components) component.applyToOtherComponent(dataHolder.get(component), dataHolder);
 
 		// 3. Display
 		Material mat = Material.STONE;
@@ -105,7 +101,7 @@ public class StandardPojoItem implements PojoItem {
 		LoreSorter lore = new LoreSorter(loreSections);
 
 		for (Component component : components) {
-			Object obj = dataMap.get(component);
+			Object obj = dataHolder.get(component);
 			mat = component.applyMaterial(obj, mat, displayMode);
 			name = component.applyName(obj, name, displayMode);
 			component.applyLore(obj, lore, displayMode);
@@ -120,10 +116,10 @@ public class StandardPojoItem implements PojoItem {
 		if (loreList.size() > 0) meta.setLore(loreList);
 
 		// 4. Post display & store data
-		for (Component component : components) component.applyPostDisplay(dataMap.get(component), meta, displayMode);
+		for (Component component : components) component.applyPostDisplay(dataHolder.get(component), meta, displayMode);
 
 		for (Component component : components) {
-			Object obj = dataMap.get(component);
+			Object obj = dataHolder.get(component);
 			component.storeDataTo(meta.getPersistentDataContainer(), obj);
 		}
 
@@ -135,50 +131,77 @@ public class StandardPojoItem implements PojoItem {
 	@Override
 	public ItemMeta updateMeta(ItemMeta source, boolean displayMode) {
 		source = PojoItem.super.updateMeta(source, displayMode);
-		Map<Component<?>, Object> dataMap = new HashMap<>();
-		ComponentDataHolder dataHolder = ComponentDataHolder.newHolder();
 
-		// 1. Load
-		for (Component component : components) {
-			Object obj = component.loadDataFrom(source.getPersistentDataContainer());
-			dataMap.put(component, obj);
-			dataHolder.addRaw(component.getClass(), obj);
-		}
+		// 1. Load and manipulate
+		ComponentDataHolder dataHolder = loadDataFrom(source, true);
 
-		// 2. Manipulate
-		for (Component component : components) component.applyToOtherComponent(dataMap.get(component), dataHolder);
-
-		// 3. Display
+		// 2. Display
 		String name = null;
 		LoreSorter lore = new LoreSorter(loreSections);
 
 		for (Component component : components) {
-			Object obj = dataMap.get(component);
-			name = component.applyName(obj, name, displayMode);
-			component.applyLore(obj, lore, displayMode);
+			Object data = dataHolder.get(component);
+			name = component.applyName(data, name, displayMode);
+			component.applyLore(data, lore, displayMode);
 		}
 
 		List<String> loreList = lore.build();
 		if (name != null) source.setLocalizedName(name);
 		if (loreList.size() > 0) source.setLore(loreList);
 
-		// 4. Post display (storing data is not included atm)
-		for (Component component : components) component.applyPostDisplay(dataMap.get(component), source, displayMode);
+		// 3. Post display (storing data is not included atm)
+		for (Component component : components)
+			component.applyPostDisplay(dataHolder.get(component), source, displayMode);
 		return source;
 	}
 
+	/**
+	 * <p>
+	 * Load all component data from {@link ItemMeta}.
+	 * </p>
+	 * 
+	 * @param meta       The meta to load.
+	 * @param manipulate {@code true} will allows components to manipulate others,
+	 *                   like applying to computed stats for example.
+	 * @return Loaded component data.
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ComponentDataHolder loadDataFrom(ItemMeta meta) {
+	public ComponentDataHolder loadDataFrom(ItemMeta meta, boolean manipulate) {
 		ComponentDataHolder dataHolder = ComponentDataHolder.newHolder();
-		Map<Component<?>, Object> dataMap = new HashMap<>();
 
 		for (Component component : components) {
-			Object obj = component.loadDataFrom(meta.getPersistentDataContainer());
-			dataMap.put(component, obj);
-			dataHolder.addRaw(component.getClass(), obj);
+			Object data = component.loadDataFrom(meta.getPersistentDataContainer());
+			dataHolder.addRaw(component, data);
 		}
 
-		for (Component component : components) component.applyToOtherComponent(dataMap.get(component), dataHolder);
+		for (Component component : components) component.applyToOtherComponent(dataHolder.get(component), dataHolder);
 		return dataHolder;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void saveDataTo(ItemMeta meta, ComponentDataHolder dataHolder) {
+		// 1. Display
+		String name = null;
+		LoreSorter lore = new LoreSorter(loreSections);
+		boolean displayMode = PojoItem.isDisplayMode(meta);
+
+		for (Component component : components) {
+			Object data = dataHolder.get(component);
+			name = component.applyName(data, name, displayMode);
+			component.applyLore(data, lore, displayMode);
+		}
+
+		List<String> loreList = lore.build();
+		if (name != null) meta.setLocalizedName(name);
+		if (loreList.size() > 0) meta.setLore(loreList);
+
+		// 2. Post display & store data
+		for (Component component : components)
+			component.applyPostDisplay(dataHolder.get(component), meta, displayMode);
+
+		for (Component component : components) {
+			Object obj = dataHolder.get(component);
+			component.storeDataTo(meta.getPersistentDataContainer(), obj);
+		}
 	}
 }
