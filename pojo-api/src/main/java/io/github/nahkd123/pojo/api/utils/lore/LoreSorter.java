@@ -92,6 +92,11 @@ public class LoreSorter {
 			}
 		}
 
+		if (orderedSections.get(orderedSections.size() - 1) instanceof SeparatorLoreSection
+			&& current.get(current.size() - 1).isEmpty()) {
+			current.remove(current.size() - 1);
+		}
+
 		return current != null ? current : Collections.emptyList();
 	}
 

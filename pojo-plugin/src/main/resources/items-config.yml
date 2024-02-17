@@ -5,6 +5,10 @@
 # line.
 loreOrdering:
 - "pojo:type"
-- "pojo:stats"
+- "pojoexpansion:stats"
 - "pojo:separator"
 - "pojo:custom"
+- "pojo:separator"
+- "pojoexpansion:gemstone"
+- "pojoexpansion:gemstone_slots"
+- "pojo:separator"
