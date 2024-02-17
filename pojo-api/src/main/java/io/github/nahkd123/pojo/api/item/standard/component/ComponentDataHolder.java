@@ -36,7 +36,7 @@ public interface ComponentDataHolder {
 				List list = mapOfLists.get(component.getClass());
 				if (list == null) mapOfLists.put(component.getClass(), list = new ArrayList());
 				list.add(data);
-				mapOfData.put(component, mapOfData);
+				mapOfData.put(component, data);
 			}
 
 			@SuppressWarnings("unchecked")

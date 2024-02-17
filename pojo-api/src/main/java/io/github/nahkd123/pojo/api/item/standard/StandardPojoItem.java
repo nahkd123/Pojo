@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import io.github.nahkd123.pojo.api.internal.PojoInternal;
 import io.github.nahkd123.pojo.api.item.PojoItem;
@@ -101,10 +102,10 @@ public class StandardPojoItem implements PojoItem {
 		LoreSorter lore = new LoreSorter(loreSections);
 
 		for (Component component : components) {
-			Object obj = dataHolder.get(component);
-			mat = component.applyMaterial(obj, mat, displayMode);
-			name = component.applyName(obj, name, displayMode);
-			component.applyLore(obj, lore, displayMode);
+			Object data = dataHolder.get(component);
+			mat = component.applyMaterial(data, mat, displayMode);
+			name = component.applyName(data, name, displayMode);
+			component.applyLore(data, lore, displayMode);
 		}
 
 		List<String> loreList = lore.build();
@@ -146,7 +147,7 @@ public class StandardPojoItem implements PojoItem {
 		}
 
 		List<String> loreList = lore.build();
-		if (name != null) source.setLocalizedName(name);
+		if (name != null) source.setDisplayName(name);
 		if (loreList.size() > 0) source.setLore(loreList);
 
 		// 3. Post display (storing data is not included atm)
@@ -155,22 +156,26 @@ public class StandardPojoItem implements PojoItem {
 		return source;
 	}
 
+	public ComponentDataHolder loadDataFrom(ItemMeta meta, boolean manipulate) {
+		return loadDataFrom(meta.getPersistentDataContainer(), manipulate);
+	}
+
 	/**
 	 * <p>
-	 * Load all component data from {@link ItemMeta}.
+	 * Load all component data from {@link PersistentDataContainer}.
 	 * </p>
 	 * 
-	 * @param meta       The meta to load.
+	 * @param meta       The persistent data container to load.
 	 * @param manipulate {@code true} will allows components to manipulate others,
 	 *                   like applying to computed stats for example.
 	 * @return Loaded component data.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ComponentDataHolder loadDataFrom(ItemMeta meta, boolean manipulate) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ComponentDataHolder loadDataFrom(PersistentDataContainer container, boolean manipulate) {
 		ComponentDataHolder dataHolder = ComponentDataHolder.newHolder();
 
 		for (Component component : components) {
-			Object data = component.loadDataFrom(meta.getPersistentDataContainer());
+			Object data = component.loadDataFrom(container);
 			dataHolder.addRaw(component, data);
 		}
 
@@ -192,16 +197,21 @@ public class StandardPojoItem implements PojoItem {
 		}
 
 		List<String> loreList = lore.build();
-		if (name != null) meta.setLocalizedName(name);
+		if (name != null) meta.setDisplayName(name);
 		if (loreList.size() > 0) meta.setLore(loreList);
 
 		// 2. Post display & store data
 		for (Component component : components)
 			component.applyPostDisplay(dataHolder.get(component), meta, displayMode);
 
+		saveDataTo(meta.getPersistentDataContainer(), dataHolder);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void saveDataTo(PersistentDataContainer container, ComponentDataHolder dataHolder) {
 		for (Component component : components) {
 			Object obj = dataHolder.get(component);
-			component.storeDataTo(meta.getPersistentDataContainer(), obj);
+			component.storeDataTo(container, obj);
 		}
 	}
 }

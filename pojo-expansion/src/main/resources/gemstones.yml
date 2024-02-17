@@ -1,0 +1,48 @@
+# Configuration for "pojoexpansion:gemstone" and "pojoexpansion:gemstone_slots"
+# components.
+
+localization:
+  # Placeholders:
+  #  {base}: The base modifier text
+  #  {value} (non-range): The modifier's numerical value
+  #  {min} and {max} (range): The modifier's value range
+  #  {name}: The name of modifier (in this case, it is the gemstone slot name)
+  #  {gemstoneName}: The name of gemstone item
+  defaults:
+    format:             " &9{base}"
+    addValue:           "+{value;number}"
+    addPercentage:      "+{value;percentage}"
+    multiplier:         "x{value;number}"
+    addValueRange:      "+{min;number} -> {max;number}"
+    addPercentageRange: "+{min;percentage} -> {max;percentage}"
+    multiplierRange:    "x{min;number} -> {max;number}"
+
+    # Gemstone slots
+    emptySlot:          "&7[&o{name}&7]"
+    filledSlot:         "&7[&f{gemstoneName}&7]"
+
+    # Gemstone
+    gemstoneLore:
+    - "&7This gemstone can be applied to"
+    - "&7slot &f{name}&7."
+
+  # Gemstone slot ID is specified in the gemstone:
+  # Component:
+  #   type: pojoexpansion:gemstone
+  #   gemstoneSlot: mynamespace:gemstone_slot_id
+  #   equipmentSlot: OFF_HAND
+  #   modifiers: {} # A collection of stat modifiers
+  #
+  # To add a gemstone slot that only accepts gemstones with given slot ID:
+  # Component:
+  #   type: pojoexpansion:gemstone_slots
+  #   gemstoneSlots:
+  #   - mynamespace:gemstone_slot_id
+  #   - mynamespace:another_slot_id
+
+  # Below is the localization configuration for "mynamespace:sample_slot"
+  # gemstone slot (follows the "defaults" structure):
+  mynamespace:
+    sample_slot:
+      name: "Sample Slot" # Name of this gemstone slot (mynamespace:sample_slot)
+      format: " &d{base}"

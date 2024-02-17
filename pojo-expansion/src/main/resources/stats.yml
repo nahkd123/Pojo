@@ -3,12 +3,18 @@
 # Localization for all stats
 localization:
   # Default stats display, applies to all unconfigured stats
-  # addValue: Add a value to player's stats
-  # addPercentage: Add a percentage to player's stats multiplier
-  # multiplier: Multiplies player's stats with a value
-  # <...>Range: Ranged version
-  # Placeholders
+  #   addValue: Add a value to player's stats
+  #   addPercentage: Add a percentage to player's stats multiplier
+  #   multiplier: Multiplies player's stats with a value
+  #   <...>Range: Ranged version
+  # Placeholders:
+  #   {base} (format only): The base stats text
+  #   {modifiers} (format only): A bunch of modifiers, separated with a space
+  #   {name}: The name of the stat
+  #   {value} (non-range): The current value
+  #   {min} and {max} (range only): The value range from {min} to {max}
   defaults:
+    format:             "{base}{modifiers}"
     addValue:           "&7{name}: &a+{value;number}"
     addPercentage:      "&7{name}: &a+{value;percentage}"
     multiplier:         "&7{name}: &ex{value;number}"

@@ -1,4 +1,4 @@
-package io.github.nahkd123.pojo.expansion.stat;
+package io.github.nahkd123.pojo.expansion.stat.localize;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.nahkd123.pojo.api.registry.UserDefinedId;
+import io.github.nahkd123.pojo.expansion.stat.Stat;
 
 public class StatsLocalizer {
 	private Map<UserDefinedId, Map<String, StatLocalizer>> localizers = new HashMap<>();
@@ -15,9 +16,14 @@ public class StatsLocalizer {
 		this.defaultLocalizer = defaultLocalizer;
 	}
 
+	public StatsLocalizer() {
+		this(StatLocalizer.DEFAULT);
+	}
+
 	public StatsLocalizer fromConfig(ConfigurationSection config) {
-		if (config.contains("defaults"))
-			defaultLocalizer = StatLocalizer.fromConfig(config.getConfigurationSection("defaults"));
+		if (config.contains("defaults")) defaultLocalizer = StatLocalizer.fromConfig(
+			StatLocalizer.DEFAULT,
+			config.getConfigurationSection("defaults"));
 
 		for (String namespace : config.getKeys(false)) {
 			if (namespace.equals("defaults")) continue;
@@ -32,9 +38,9 @@ public class StatsLocalizer {
 					StatLocalizer localizer;
 
 					if (obj instanceof String str)
-						localizer = new StatLocalizer(defaultLocalizer, str, null, null, null, null, null, null);
+						localizer = new StatLocalizer(defaultLocalizer, str, null, null, null, null, null, null, null);
 					else if (obj instanceof ConfigurationSection s)
-						localizer = StatLocalizer.fromConfig(s);
+						localizer = StatLocalizer.fromConfig(defaultLocalizer, s);
 					else continue;
 
 					define(udid, key, localizer);

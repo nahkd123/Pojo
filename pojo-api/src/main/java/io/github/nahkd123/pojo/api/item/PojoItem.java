@@ -112,6 +112,10 @@ public interface PojoItem extends RegistryEntry {
 		return poc.getOrDefault(keys().displayMode, PersistentDataType.BOOLEAN, false);
 	}
 
+	public static PojoItem getFrom(UserDefinedId id) {
+		return PojoInternal.instance().getItems().get(id);
+	}
+
 	/**
 	 * <p>
 	 * Get the {@link PojoItem} by getting ID from {@link ItemMeta}.

@@ -11,9 +11,11 @@ import org.bukkit.plugin.Plugin;
 public class PojoKeys {
 	public final NamespacedKey id;
 	public final NamespacedKey displayMode;
+	public final NamespacedKey seed;
 
 	public PojoKeys(Plugin plugin) {
 		id = new NamespacedKey(plugin, "id");
 		displayMode = new NamespacedKey(plugin, "display_mode");
+		seed = new NamespacedKey(plugin, "seed");
 	}
 }

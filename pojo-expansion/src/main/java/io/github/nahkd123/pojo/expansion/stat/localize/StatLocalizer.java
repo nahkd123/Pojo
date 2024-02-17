@@ -1,10 +1,12 @@
-package io.github.nahkd123.pojo.expansion.stat;
+package io.github.nahkd123.pojo.expansion.stat.localize;
 
 import java.util.Random;
 
 import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.nahkd123.pojo.api.utils.TextUtils;
+import io.github.nahkd123.pojo.expansion.stat.StatOperation;
+import io.github.nahkd123.pojo.expansion.stat.compute.ComputedStat;
 import io.github.nahkd123.pojo.expansion.stat.value.StatConstantValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatValue;
 import io.github.nahkd123.pojo.expansion.stat.value.StatValueWithMaxMin;
@@ -14,6 +16,7 @@ public class StatLocalizer {
 	// @formatter:off
 	public static final StatLocalizer DEFAULT = new StatLocalizer(
 		null, null,
+		"{base}{modifiers}",
 		"&7{name}: &a+{value}",
 		"&7{name}: &a+{value;percentage}%",
 		"&7{name}: &ex{value}",
@@ -23,6 +26,7 @@ public class StatLocalizer {
 	// @formatter:on
 
 	private String name;
+	private String format;
 	private String addValue;
 	private String addPercentage;
 	private String multiplier;
@@ -30,8 +34,9 @@ public class StatLocalizer {
 	private String addPercentageRange;
 	private String multiplierRange;
 
-	public StatLocalizer(StatLocalizer parent, String name, String addValue, String addPercentage, String multiplier, String addValueRange, String addPercentageRange, String multiplierRange) {
+	public StatLocalizer(StatLocalizer parent, String name, String format, String addValue, String addPercentage, String multiplier, String addValueRange, String addPercentageRange, String multiplierRange) {
 		this.name = name;
+		this.format = format != null ? format : parent.format;
 		this.addValue = addValue != null ? addValue : parent.addValue;
 		this.addPercentage = addPercentage != null ? addPercentage : parent.addPercentage;
 		this.multiplier = multiplier != null ? multiplier : parent.multiplier;
@@ -40,20 +45,23 @@ public class StatLocalizer {
 		this.multiplierRange = multiplierRange != null ? multiplierRange : parent.multiplierRange;
 	}
 
-	public static StatLocalizer fromConfig(ConfigurationSection config) {
+	public static StatLocalizer fromConfig(StatLocalizer parent, ConfigurationSection config) {
 		String name = config.getString("name");
+		String format = config.getString("format");
 		String addValue = config.getString("addValue");
 		String addPercentage = config.getString("addPercentage");
 		String multiplier = config.getString("multiplier");
 		String addValueRange = config.getString("addValueRange");
 		String addPercentageRange = config.getString("addPercentageRange");
 		String multiplierRange = config.getString("multiplierRange");
-		return new StatLocalizer(DEFAULT, name, addValue, addPercentage, multiplier, addValueRange, addPercentageRange, multiplierRange);
+		return new StatLocalizer(parent, name, format, addValue, addPercentage, multiplier, addValueRange, addPercentageRange, multiplierRange);
 	}
 
 	public String getName() { return name; }
 
-	public String localize(String name, StatOperation operation, double value) {
+	public String getFormat() { return format; }
+
+	public String localizeBase(String name, StatOperation operation, double value) {
 		String s = switch (operation) {
 		case ADD_VALUE -> addValue;
 		case ADD_PERCENTAGE -> addPercentage;
@@ -68,7 +76,7 @@ public class StatLocalizer {
 		return TextUtils.colorize(s);
 	}
 
-	public String localize(String name, StatOperation operation, double min, double max) {
+	public String localizeBase(String name, StatOperation operation, double min, double max) {
 		String s = switch (operation) {
 		case ADD_VALUE -> addValueRange;
 		case ADD_PERCENTAGE -> addPercentageRange;
@@ -85,9 +93,22 @@ public class StatLocalizer {
 		return TextUtils.colorize(s);
 	}
 
-	public String localize(String name, StatOperation operation, StatValue value) {
-		if (value instanceof StatValueWithMaxMin mm) return localize(name, operation, mm.getMin(), mm.getMax());
-		if (value instanceof StatConstantValue cons) return localize(name, operation, cons.value());
-		return localize(name, operation, value.get(new Random()));
+	public String localizeBase(String name, StatOperation operation, StatValue value) {
+		if (value instanceof StatValueWithMaxMin mm) return localizeBase(name, operation, mm.getMin(), mm.getMax());
+		if (value instanceof StatConstantValue cons) return localizeBase(name, operation, cons.value());
+		return localizeBase(name, operation, value.get(new Random()));
+	}
+
+	public String localize(ComputedStat computed) {
+		String base = localizeBase(
+			name != null ? name : computed.getStat().getTranslationKey(),
+			computed.getStat().getOperation(),
+			computed.getValue());
+
+		return PlaceholderUtils.apply(s -> switch (s) {
+		case "base" -> base;
+		case "modifiers" -> computed.getModifiers();
+		default -> null;
+		}, TextUtils.colorize(format));
 	}
 }
