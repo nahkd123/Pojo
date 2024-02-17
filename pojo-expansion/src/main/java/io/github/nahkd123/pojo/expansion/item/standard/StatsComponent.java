@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -19,7 +20,10 @@ import io.github.nahkd123.pojo.api.editor.Editable;
 import io.github.nahkd123.pojo.api.editor.EditableList;
 import io.github.nahkd123.pojo.api.editor.EditableObject;
 import io.github.nahkd123.pojo.api.editor.NodeDescription;
+import io.github.nahkd123.pojo.api.item.PojoItem;
+import io.github.nahkd123.pojo.api.item.standard.StandardPojoItem;
 import io.github.nahkd123.pojo.api.item.standard.component.Component;
+import io.github.nahkd123.pojo.api.item.standard.component.ComponentDataHolder;
 import io.github.nahkd123.pojo.api.item.standard.component.ComponentsFactory;
 import io.github.nahkd123.pojo.api.item.standard.component.EditorComponentsFactory;
 import io.github.nahkd123.pojo.api.item.standard.component.EditorSupportedComponent;
@@ -267,5 +271,37 @@ public class StatsComponent implements Component<ComputedStats>, EditorSupported
 		// Clear all modifiers so that AttributeStat can add new modifiers
 		meta.setAttributeModifiers(null);
 		for (Stat stat : stats) stat.applyToItemMeta(meta, data.get(stat).getValue(), slot);
+	}
+
+	/**
+	 * <p>
+	 * Compute item stats from given {@link ItemMeta}. This also takes gemstones and
+	 * other modifiers into account (modifiers are components that modifies the
+	 * computed stats).
+	 * </p>
+	 * 
+	 * @param meta The meta.
+	 * @return An unmodifiable collection of computed stats lists, each associated
+	 *         with {@link StatsComponent}.
+	 */
+	public static List<ComputedStats> computeItemStats(ItemMeta meta) {
+		PojoItem item = PojoItem.getFrom(meta);
+		if (!(item instanceof StandardPojoItem std)) return Collections.emptyList();
+
+		ComponentDataHolder dataHolder = std.loadDataFrom(meta);
+		return Collections.unmodifiableList(dataHolder.get(StatsComponent.class));
+	}
+
+	/**
+	 * <p>
+	 * Compute item stats from {@link ItemStack}. See
+	 * {@link #computeItemStats(ItemMeta)} for more information.
+	 * </p>
+	 * 
+	 * @param stack The item.
+	 * @return An unmodifiable collection of computed stats.
+	 */
+	public static List<ComputedStats> computeItemStats(ItemStack stack) {
+		return stack != null && stack.hasItemMeta() ? computeItemStats(stack.getItemMeta()) : null;
 	}
 }

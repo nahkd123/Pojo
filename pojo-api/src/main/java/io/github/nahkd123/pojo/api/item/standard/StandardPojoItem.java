@@ -166,4 +166,19 @@ public class StandardPojoItem implements PojoItem {
 		for (Component component : components) component.applyPostDisplay(dataMap.get(component), source, displayMode);
 		return source;
 	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ComponentDataHolder loadDataFrom(ItemMeta meta) {
+		ComponentDataHolder dataHolder = ComponentDataHolder.newHolder();
+		Map<Component<?>, Object> dataMap = new HashMap<>();
+
+		for (Component component : components) {
+			Object obj = component.loadDataFrom(meta.getPersistentDataContainer());
+			dataMap.put(component, obj);
+			dataHolder.addRaw(component.getClass(), obj);
+		}
+
+		for (Component component : components) component.applyToOtherComponent(dataMap.get(component), dataHolder);
+		return dataHolder;
+	}
 }

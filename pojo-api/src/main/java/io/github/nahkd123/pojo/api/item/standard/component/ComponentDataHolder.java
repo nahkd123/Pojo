@@ -11,7 +11,7 @@ import java.util.Map;
  * </p>
  */
 public interface ComponentDataHolder {
-	public <C extends Component<T>, T> List<C> get(Class<C> component);
+	public <C extends Component<T>, T> List<T> get(Class<C> component);
 
 	public <C extends Component<T>, T> void add(Class<C> type, T data);
 
@@ -35,8 +35,8 @@ public interface ComponentDataHolder {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public <C extends Component<T>, T> List<C> get(Class<C> type) {
-				return (List<C>) map.get(type);
+			public <C extends Component<T>, T> List<T> get(Class<C> type) {
+				return (List<T>) map.get(type);
 			}
 		};
 	}

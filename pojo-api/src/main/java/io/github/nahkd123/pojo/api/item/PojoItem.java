@@ -95,4 +95,22 @@ public interface PojoItem extends RegistryEntry {
 			? UserDefinedId.fromString(poc.get(keys().id, PersistentDataType.STRING))
 			: null;
 	}
+
+	/**
+	 * <p>
+	 * Get the {@link PojoItem} by getting ID from {@link ItemMeta}.
+	 * </p>
+	 * 
+	 * @param meta The item meta to extract ID.
+	 * @return {@code null} if there is no ID in item meta or item with specified ID
+	 *         is not registered in global items registry.
+	 */
+	public static PojoItem getFrom(ItemMeta meta) {
+		UserDefinedId id = getId(meta);
+		return id != null ? PojoInternal.instance().getItems().get(id) : null;
+	}
+
+	public static PojoItem getFrom(ItemStack stack) {
+		return stack != null && stack.hasItemMeta() ? getFrom(stack.getItemMeta()) : null;
+	}
 }

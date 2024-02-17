@@ -23,6 +23,7 @@ Pojo Scripts are powered by [MangoScript](https://github.com/MangoPlex/MangoScri
 - [ ] Social banner image
 - [ ] Custom items
     + [x] Display component (kinda completed?)
+    + [ ] Unique identifier component
     + [ ] Emit warning when configuration is invalid
 - [ ] Pojo Expansion
     + [ ] Stats component
