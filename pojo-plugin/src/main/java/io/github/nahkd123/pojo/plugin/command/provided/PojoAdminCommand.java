@@ -68,6 +68,23 @@ public class PojoAdminCommand extends CommandExecutorWrapper {
 
 					EditorGUI gui = target.createGUI(session);
 					player.openInventory(gui.getInventory());
+				}))
+			.withChildren("updateDisplay", new SimplePluginCommand()
+				.withArgument("player", PlayerArgumentType.TYPE)
+				.withCallback(ctx -> {
+					Player player = ctx.getArgument("player", PlayerArgumentType.TYPE);
+					ItemStack[] contents = player.getInventory().getContents();
+					int updated = 0;
+
+					for (int i = 0; i < contents.length; i++) {
+						if (contents[i] == null) continue;
+						if (!(PojoItem.getFrom(contents[i]) instanceof PojoItem item)) continue;
+						updated++;
+						contents[i] = item.updateItem(contents[i]);
+					}
+
+					player.getInventory().setContents(contents);
+					ctx.feedback("&eUpdated " + updated + " items in " + player.getDisplayName() + "'s inventory!");
 				}));
 	}
 
