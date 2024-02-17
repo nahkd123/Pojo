@@ -23,10 +23,13 @@ jobs:
         mvn -B install --file MangoScript/pom.xml
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: Copy artifacts root
+      run: |
+        cp pojo-plugin/target/pojo-*.jar ./
+        cp pojo-expansion/target/pojo-*.jar ./
     - name: Upload plugins as artifact
       uses: actions/upload-artifact@v4
       with:
         name: Pojo Plugins
         path: |
-          pojo-plugin/target/pojo-*.jar
-          pojo-expansion/target/pojo-*.jar
+          ./pojo-*.jar
