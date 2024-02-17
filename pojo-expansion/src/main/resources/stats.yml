@@ -19,7 +19,7 @@ localization:
     addPercentage:      "&7{name}: &a+{value;percentage}"
     multiplier:         "&7{name}: &ex{value;number}"
     addValueRange:      "&7{name}: &a+{min;number} &7-> &a+{max;number}"
-    addPercentageRange: "&7{name}: &a+{min;percentage}% &7-> &a+{max;percentage}"
+    addPercentageRange: "&7{name}: &a+{min;percentage} &7-> &a+{max;percentage}"
     multiplierRange:    "&7{name}: &ex{min;number} &7-> &ex{max;number}"
 
   # Stat type ID namespace
