@@ -2,6 +2,7 @@ package io.github.nahkd123.pojo.expansion.event;
 
 import java.util.Optional;
 
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import io.github.nahkd123.pojo.api.item.PojoItem;
 import io.github.nahkd123.pojo.api.item.standard.StandardPojoItem;
 import io.github.nahkd123.pojo.api.item.standard.component.ComponentDataHolder;
+import io.github.nahkd123.pojo.api.utils.TextUtils;
 import io.github.nahkd123.pojo.expansion.item.standard.GemstoneComponent;
 import io.github.nahkd123.pojo.expansion.item.standard.GemstoneSlotsComponent;
 import io.github.nahkd123.pojo.expansion.stat.gemstone.Gemstone;
@@ -50,6 +52,14 @@ public class InventoryEventsListener implements Listener {
 
 		ComponentDataHolder cursorDataHolder = cursorStd.loadDataFrom(cursorStack.getItemMeta(), true);
 		Gemstone gemstone = new Gemstone(PojoItem.getId(cursorStack), cursorDataHolder);
+
+		if (event.getWhoClicked().getGameMode() == GameMode.CREATIVE) {
+			event.getWhoClicked().sendMessage(TextUtils
+				.colorize("&6&lNOTE: &eGemstones can only be applied in any gamemode that isn't Creative mode! "
+					+ "I still couldn't figure out a way to prevent unwanted creative mode item duplication..."));
+			return false;
+		}
+
 		if (!slots.tryAttachGemstone(gemstoneComponent.get().getSlotId(), gemstone)) return false;
 
 		// Apply

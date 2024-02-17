@@ -93,6 +93,8 @@ public class LoreSorter {
 		}
 
 		if (orderedSections.get(orderedSections.size() - 1) instanceof SeparatorLoreSection
+			&& current != null
+			&& current.size() > 0
 			&& current.get(current.size() - 1).isEmpty()) {
 			current.remove(current.size() - 1);
 		}
